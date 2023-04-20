@@ -8,4 +8,4 @@ pickle
 json
 nltk
 tqdm
-
+geopandas
