@@ -1,6 +1,11 @@
 pandas
 seaborn
+numpy
 matplotlib
 scipy
 sklearn
 pickle
+json
+nltk
+tqdm
+
