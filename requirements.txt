@@ -9,3 +9,4 @@ json
 nltk
 tqdm
 geopandas
+statannot
