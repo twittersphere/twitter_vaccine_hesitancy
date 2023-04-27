@@ -8,4 +8,7 @@ pickle
 json
 nltk
 tqdm
-
+geopandas
+statannot
+datashader
+patchworklib
