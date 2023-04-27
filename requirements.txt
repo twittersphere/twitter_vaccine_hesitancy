@@ -12,3 +12,5 @@ geopandas
 statannot
 datashader
 patchworklib
+PIL
+multiprocessing
