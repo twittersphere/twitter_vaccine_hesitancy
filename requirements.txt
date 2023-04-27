@@ -10,3 +10,4 @@ nltk
 tqdm
 geopandas
 statannot
+datashader
