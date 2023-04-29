@@ -14,3 +14,12 @@ datashader
 patchworklib
 PIL
 multiprocessing
+searchtweets-v2
+tweepy
+transformers==4.17.0
+simpletransformers==0.62.4
+torch==1.9.1
+tensorflow
+sentence-transformers
+pyldavis
+betabinomial
