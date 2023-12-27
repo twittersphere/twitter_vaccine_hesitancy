@@ -1,6 +1,6 @@
 **/__pycache__/
 **/.vscode
+**.ipynb
 **/.DS_Store
-**/*.ipynb
-**/*notebooks*
 show_directory_tree.py
+**/*test_script.py
