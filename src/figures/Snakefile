@@ -1,0 +1,10 @@
+rule fetched_data_barplot:
+    input:
+        "figures/icons/twitter_bird_icon.png",
+        "figures/icons/avatar_icon.png",
+        "figures/icons/location_icon.png",
+        "data/processed/dataframes/eda_df.parquet"
+    output:
+        "figures/all_figures/tweet_user_geoloc_counts.tiff"
+    script:
+        "src/figures/fetched_data_barplot.py"

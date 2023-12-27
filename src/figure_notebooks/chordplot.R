@@ -1,4 +1,4 @@
-data_path <- "/data/processed/dataframes/prepared_links.csv"
+data_path <- "data/processed/dataframes/prepared_links.csv"
 
 library(showtext)
 library(data.table)
@@ -45,7 +45,7 @@ for (i in topic_names) {
 }
 
 showtext_auto()
-pdf(file = "/figures/experimental/main_figures/user_topic_analysis_on_ChordDiagram.pdf", width=7, height=3.5)
+pdf(file = "figures/experimental/main_figures/user_topic_analysis_on_ChordDiagram.pdf", width=7, height=3.5)
 par(mfrow = c(2, 4), cex= 0.45, mar = c(0, 2, 0, 1.1), xpd=NA)
 for (i in topic_names) {
   str_counter <- as.character(counter)

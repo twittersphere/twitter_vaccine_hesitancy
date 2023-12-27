@@ -1,0 +1,36 @@
+# use conda
+
+rule fetch_crowdbreaks_data:
+    input:
+        "data/crowdbreaks_data/crowdbreaks_data.csv",
+        "data/crowdbreaks_data/crowdbreaks_tweet_ids_and_labels.csv"
+    output:
+        "data/crowdbreaks_data/crowdbreaks_tweets.parquet"
+    script:
+        "src/fetching_data/fetching_crowdbreaks_tweets.py"
+
+rule fetch_country_tweet_counts:
+    input:
+        "credentials/twitter_keys_unlimited.yaml",
+        "data/raw/country_list.csv"
+    output:
+        "data/logs/fetching_country_tweet_counts.txt",
+    script:
+        "src/fetching_data/fetching_country_tweet_counts.py"
+
+rule fetch_vaccine_vaccination_tweets:
+    input:
+        "credentials/twitter_keys_unlimited.yaml",
+        "data/raw/country_list.csv"
+    output:
+        "data/logs/fetching_vaccine_vaccination_tweets.txt",
+    script:
+        "src/fetching_data/fetching_vaccine_vaccination_tweets.py"
+
+rule fetch_geo_data:
+    input:
+        "data/logs/fetching_vaccine_vaccination_tweets.txt"
+    output:
+        "data/processed/dataframes/unique_geo_ids_with_states.parquet"
+    script:
+        "src/fetching_data/fetching_geo_data.py"

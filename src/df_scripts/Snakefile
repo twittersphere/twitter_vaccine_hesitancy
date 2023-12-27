@@ -1,0 +1,7 @@
+rule eda_of_fetched_data:
+    input:
+        "data/logs/fetching_vaccine_vaccination_tweets.txt"
+    output:
+        "data/processed/data_frames/eda_df.parquet"
+    script:
+        "src/df_scripts/eda_of_fetched_data.py"

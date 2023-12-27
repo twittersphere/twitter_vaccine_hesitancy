@@ -1,0 +1,7 @@
+rule country_tweet_counts_to_table:
+    input:
+        "data/logs/fetching_country_tweet_counts.txt"
+    output:
+        "data/tables/s1_table.xlsx"
+    script:
+        "src/table_scripts/country_tweet_counts_and_ratio.py"

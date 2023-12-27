@@ -3,9 +3,6 @@ import pandas as pd
 from tqdm import tqdm
 
 class Tools:
-    def __init__(self) -> None:
-        pass
-
     def create_chunks(self, lst, n):
         """Yield successive n-sized chunks from lst."""
         for i in range(0, len(lst), n):
