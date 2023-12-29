@@ -1,3 +1,7 @@
+rule df_scripts_all:
+    input:
+        "data/processed/data_frames/eda_df.parquet"
+
 rule eda_of_fetched_data:
     input:
         "data/logs/fetching_vaccine_vaccination_tweets.txt"

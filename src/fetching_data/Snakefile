@@ -1,4 +1,9 @@
-# use conda
+rule fetching_data_all:
+    input:
+        "data/crowdbreaks_data/crowdbreaks_tweets.parquet",
+        "data/logs/fetching_country_tweet_counts.txt",
+        "data/logs/fetching_vaccine_vaccination_tweets.txt",
+        "data/processed/dataframes/unique_geo_ids_with_states.parquet",
 
 rule fetch_crowdbreaks_data:
     input:

@@ -1,3 +1,8 @@
+rule sentiment_analysis_all:
+    input:
+        "data/logs/tweet_sentiment_prediction.txt",
+        "data/logs/bert_model_fine_tuning.txt"
+
 rule bert_model_fine_tuning:
     input:
         "data/crowdbreaks_data/crowdbreaks_tweet_ids_and_labels.csv",

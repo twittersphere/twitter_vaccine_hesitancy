@@ -1,3 +1,9 @@
+rule figures_all:
+    input:
+        "figures/all_figures/tweet_user_geoloc_counts.tiff",
+        "figures/all_figures/user_topic_analysis_on_ChordDiagram.pdf",
+        
+
 rule fetched_data_barplot:
     input:
         "figures/icons/twitter_bird_icon.png",
@@ -8,3 +14,11 @@ rule fetched_data_barplot:
         "figures/all_figures/tweet_user_geoloc_counts.tiff"
     script:
         "src/figures/fetched_data_barplot.py"
+
+rule chordplot:
+    input:
+        "data/processed/data_frames/prepared_links.csv"
+    output:
+        "figures/all_figures/user_topic_analysis_on_ChordDiagram.pdf"
+    script:
+        "src/figures/chordplot.R"

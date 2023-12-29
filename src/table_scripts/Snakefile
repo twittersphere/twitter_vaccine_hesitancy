@@ -1,3 +1,7 @@
+rule table_scripts_all:
+    input:
+        "data/tables/s1_table.xlsx",
+
 rule country_tweet_counts_to_table:
     input:
         "data/logs/fetching_country_tweet_counts.txt"

@@ -27,7 +27,8 @@ class ReadData:
             
         if self.filter_tweets:
             df = df[df['text'].notnull()]
-            df = df[df['text'].apply(lambda x: len(self.TOKENIZER.tokenize(x)) >= 10)]
+            df = df[df['text'].apply(lambda x: len(
+                                        self.TOKENIZER.tokenize(x)) >= 10)]
 
         if self.custom_filter is not None:
             df = df[eval(self.custom_filter)]
@@ -44,7 +45,17 @@ class ReadData:
         self.data = self.tools.concatenate_data(self.data, batch_size,
                                                 concat_type='pd')
         if self.filter_tweets:
-            self.data = self.data.drop_duplicates('text')
+            df_path = "data/processed/data_frames"
+            if os.path.isfile(f"{df_path}/processed_ids.parquet"):
+                processed_ids = pd.read_parquet(
+                                f"{df_path}/processed_ids.parquet")
+                self.data = self.data[~self.data['id'].isin(
+                                                    processed_ids['id'])]
+            else:
+                self.data = self.data.drop_duplicates('text')
+                os.makedirs(f"{df_path}", exist_ok=True)
+                pd.DataFrame({'id': self.data['id'].values}).to_parquet(
+                                f"{df_path}/processed_ids.parquet")
             self.data = self.data.reset_index(drop=True)
 
     def read_files_and_combine_data(self, processes=8, batch_size=10):

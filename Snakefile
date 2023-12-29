@@ -6,13 +6,9 @@ include: "src/figures/Snakefile"
 
 rule all:
     input:
-      rules.eda_of_fetched_data.output,
-      rules.fetch_crowdbreaks_data.output,
-      rules.fetch_country_tweet_counts.output,
-      rules.fetch_vaccine_vaccination_tweets.output,
-      rules.fetch_geo_data.output,
-      rules.fetched_data_barplot.output,
-      rules.bert_model_fine_tuning.output,
-      rules.tweet_sentiment_predictions.output,
-      rules.country_tweet_counts_to_table.output,
-    
+        rules.fetching_data_all.input,
+        rules.df_scripts_all.input,
+        rules.sentiment_analysis_all.input,
+        rules.table_scripts_all.input,
+        rules.figures_all.input
+    default_target: True
