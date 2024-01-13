@@ -109,7 +109,7 @@ class GeoDataFetcher:
 def main():
     credentials = utils.load_twitter_credentials_json()
     main_configs = utils.load_main_config()
-    data_path = "data/processed/daily_data_parquet"
+    data_path = "data/processed/daily_us_data_parquet"
     save_path = "data/processed/geo_data"
     df_path = "data/processed/dataframes/unique_geo_ids_with_states.parquet"
     os.makedirs(save_path, exist_ok=True)

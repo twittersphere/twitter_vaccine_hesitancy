@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-from tqdm import tqdm
 from multiprocessing import Pool
 from nltk.tokenize import RegexpTokenizer
 
@@ -35,22 +34,22 @@ class ReadData:
         
         if self.column_list is None:
             return df
-        return df[self.column_list]
+        return df[self.column_list] if self.column_list else df
 
     def read_files(self, processes=8):
         with Pool(processes=processes) as pool:
             self.data = pool.map(self._read_a_file, self.file_list)
 
-    def combine_data(self, batch_size=10):
+    def combine_data(self, batch_size=10, reset_ids=False):
         self.data = self.tools.concatenate_data(self.data, batch_size,
                                                 concat_type='pd')
         if self.filter_tweets:
             df_path = "data/processed/data_frames"
-            if os.path.isfile(f"{df_path}/processed_ids.parquet"):
+            if os.path.isfile(f"{df_path}/processed_ids.parquet") and not reset_ids:
                 processed_ids = pd.read_parquet(
                                 f"{df_path}/processed_ids.parquet")
-                self.data = self.data[~self.data['id'].isin(
-                                                    processed_ids['id'])]
+                processed_ids = set(processed_ids['id'].values.tolist())
+                self.data = self.data[~self.data['id'].isin(processed_ids)]
             else:
                 self.data = self.data.drop_duplicates('text')
                 os.makedirs(f"{df_path}", exist_ok=True)
@@ -58,8 +57,9 @@ class ReadData:
                                 f"{df_path}/processed_ids.parquet")
             self.data = self.data.reset_index(drop=True)
 
-    def read_files_and_combine_data(self, processes=8, batch_size=10):
+    def read_files_and_combine_data(self, processes=8, batch_size=10,
+                                    reset_ids=False):
         self.read_files(processes=processes)
-        self.combine_data(batch_size=batch_size)
+        self.combine_data(batch_size=batch_size, reset_ids=reset_ids)
 
     

@@ -4,6 +4,7 @@ rule fetching_data_all:
         "data/logs/fetching_country_tweet_counts.txt",
         "data/logs/fetching_vaccine_vaccination_tweets.txt",
         "data/processed/dataframes/unique_geo_ids_with_states.parquet",
+        "data/logs/insert_missed_tweets.txt"
 
 rule fetch_crowdbreaks_data:
     input:
@@ -19,16 +20,15 @@ rule fetch_country_tweet_counts:
         "credentials/twitter_keys_unlimited.yaml",
         "data/raw/country_list.csv"
     output:
-        "data/logs/fetching_country_tweet_counts.txt",
+        "data/logs/fetching_country_tweet_counts.txt"
     script:
         "src/fetching_data/fetching_country_tweet_counts.py"
 
 rule fetch_vaccine_vaccination_tweets:
     input:
-        "credentials/twitter_keys_unlimited.yaml",
-        "data/raw/country_list.csv"
+        "credentials/twitter_keys_unlimited.yaml"
     output:
-        "data/logs/fetching_vaccine_vaccination_tweets.txt",
+        "data/logs/fetching_vaccine_vaccination_tweets.txt"
     script:
         "src/fetching_data/fetching_vaccine_vaccination_tweets.py"
 
@@ -39,3 +39,11 @@ rule fetch_geo_data:
         "data/processed/dataframes/unique_geo_ids_with_states.parquet"
     script:
         "src/fetching_data/fetching_geo_data.py"
+
+rule insert_missed_tweets:
+    input:
+        "data/logs/fetching_vaccine_vaccination_tweets.txt"
+    output:
+        "data/logs/insert_missed_tweets.txt"
+    script:
+        "src/fetching_data/insert_missed_tweets.py"

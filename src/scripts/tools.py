@@ -17,7 +17,8 @@ class Tools:
             for i in range(0, len(lst), n):
                 yield [lst.pop(0).astype(dtype) for i in range(len(lst[:n]))]
 
-    def concatenate_data(self, list_of_data, n_concat, concat_type='np', dtype=None, axis=0):
+    def concatenate_data(self, list_of_data, n_concat, concat_type='np',
+                         dtype=None, axis=0):
         if dtype:
             concatenated_data = list_of_data.pop(0).astype(dtype)
         else:

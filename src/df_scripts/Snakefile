@@ -4,8 +4,17 @@ rule df_scripts_all:
 
 rule eda_of_fetched_data:
     input:
-        "data/logs/fetching_vaccine_vaccination_tweets.txt"
+        "data/logs/insert_missed_tweets.txt"
     output:
         "data/processed/data_frames/eda_df.parquet"
     script:
         "src/df_scripts/eda_of_fetched_data.py"
+
+rule combining_sentiment_predictions:
+    input:
+        "data/logs/tweet_sentiment_prediction.txt"
+    output:
+        "data/processed/tweet_sentiment_predictions/world_data_sentiments_raw.parquet",
+        "data/processed/tweet_sentiment_predictions/us_data_sentiments_raw.parquet"
+    script:
+        "src/df_scripts/combining_sentiment_predictions.py"

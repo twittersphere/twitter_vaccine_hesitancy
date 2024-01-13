@@ -23,19 +23,24 @@ def split_text(text):
     return [' '.join(raw_text), ' '.join(hashtags),
             ' '.join(mentions), ' '.join(links)]
 
-def day_step(start, end, search_args, columns):
-    saving_path = f"data/raw/daily_data_parquet/{start[:10]}.parquet"
+def day_step(start, end, search_args, columns, us_only=False):
+    if us_only:
+        folder_name = "daily_us_data"
+    else:
+        folder_name = "daily_data"
 
-    if os.path.isfile(saving_path):
+    if os.path.isfile(f"data/raw/{folder_name}_parquet/{start[:10]}.parquet"):
         return
 
     print("start:", start, "end:", end)
-    vaccine_vaccination_tweets = get_collected_tweets(start, end, search_args)
-    save_tweets(vaccine_vaccination_tweets, start, saving_path, columns)
+    vaccine_vaccination_tweets = get_collected_tweets(start, end, search_args,
+                                                      us_only=us_only)
+    save_tweets(vaccine_vaccination_tweets, start, folder_name, columns)
 
-def get_collected_tweets(start, end, search_args):
-    # place_country:US, lang:en
+def get_collected_tweets(start, end, search_args, us_only=False):
     query = "(vaccine OR vaccination) lang:en -is:retweet"
+    if us_only:
+        query += " place_country:US"
     tweet_fields = "id,text,created_at,geo,author_id,lang"
     query = gen_request_parameters(query,
                                     results_per_call=500, granularity="",
@@ -47,8 +52,8 @@ def get_collected_tweets(start, end, search_args):
                                                  result_stream_args=search_args)
     return vaccine_vaccination_tweets
 
-def save_tweets(vaccine_vaccination_tweets, start, saving_path, columns):
-    with open(f"data/raw/daily_data_json/{start[:10]}.json", 'w') as f:
+def save_tweets(vaccine_vaccination_tweets, start, folder_name, columns):
+    with open(f"data/raw/{folder_name}_json/{start[:10]}.json", 'w') as f:
         json.dump(vaccine_vaccination_tweets, f)
 
     daily_tweets = []
@@ -75,7 +80,8 @@ def save_tweets(vaccine_vaccination_tweets, start, saving_path, columns):
                                  language, *text, *geo_array])
 
     df = pd.DataFrame(daily_tweets, columns=columns)
-    df.to_parquet(saving_path, index=False)
+    df.to_parquet(f"data/raw/{folder_name}_parquet/{start[:10]}.parquet",
+                  index=False)
 
 def main():
     columns = ['id', 'author_id', 'created_at', 'language', 'text', 'hashtags',
@@ -83,9 +89,15 @@ def main():
                'longitude', 'latitude']
 
     search_args = load_twitter_cretentials_yaml()
-    search_args['endpoint'] = "https://api.twitter.com/2/tweets/search/recent"
+    search_args['endpoint'] = "https://api.twitter.com/2/tweets/search/all"
 
     days = pd.date_range('2020-01-01', '2022-01-01', freq='D')
+    for idx in range(len(days)-1):
+        start = str(days[idx])[:16].replace(' ', 'T')
+        end = str(days[idx+1])[:16].replace(' ', 'T')
+
+        day_step(start, end, search_args, columns, us_only=True)
+
     for idx in range(len(days)-1):
         start = str(days[idx])[:16].replace(' ', 'T')
         end = str(days[idx+1])[:16].replace(' ', 'T')

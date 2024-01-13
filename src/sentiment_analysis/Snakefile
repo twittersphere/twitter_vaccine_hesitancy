@@ -14,7 +14,8 @@ rule bert_model_fine_tuning:
 
 rule tweet_sentiment_predictions:
     input:
-        "data/logs/bert_model_fine_tuning.txt"
+        "data/logs/bert_model_fine_tuning.txt",
+        "data/logs/insert_missed_tweets.txt"
     output:
         "data/logs/tweet_sentiment_prediction.txt"
     script:
