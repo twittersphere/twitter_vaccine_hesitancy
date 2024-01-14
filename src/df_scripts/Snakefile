@@ -18,3 +18,24 @@ rule combining_sentiment_predictions:
         "data/processed/tweet_sentiment_predictions/us_data_sentiments_raw.parquet"
     script:
         "src/df_scripts/combining_sentiment_predictions.py"
+
+rule id_date_filteredlabel:
+    input:
+        "data/processed/tweet_sentiment_predictions/world_data_sentiments_raw.parquet",
+        "data/processed/tweet_sentiment_predictions/us_data_sentiments_raw.parquet"
+    output:
+        "data/processed/data_frames/us_id_date_filteredlabels.parquet"
+        "data/processed/data_frames/world_id_date_filteredlabels.parquet"
+    script:
+        "src/df_scripts/id_date_filteredlabel.py"
+
+rule fisher_exact:
+    input:
+        "data/processed/data_frames/us_id_date_filteredlabels.parquet",
+        "data/processed/data_frames/world_id_date_filteredlabels.parquet"
+    output:
+        "data/processed/data_frames/fisher_exact/us_fisher_values.parquet",
+        "data/processed/data_frames/fisher_exact/world_fisher_values.parquet",
+        "data/processed/data_frames/fisher_exact/daily_us_fisher_values.parquet"
+    script:
+        "src/df_scripts/fisher_exact.py"
