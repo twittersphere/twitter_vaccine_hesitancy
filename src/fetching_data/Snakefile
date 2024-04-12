@@ -2,8 +2,7 @@ rule fetching_data_all:
     input:
         "data/crowdbreaks_data/crowdbreaks_tweets.parquet",
         "data/logs/fetching_country_tweet_counts.txt",
-        "data/logs/fetching_vaccine_vaccination_tweets.txt",
-        "data/processed/dataframes/unique_geo_ids_with_states.parquet",
+        "data/logs/locational_tweets_merged_with_states.txt",
         "data/logs/insert_missed_tweets.txt"
 
 rule fetch_crowdbreaks_data:
@@ -47,3 +46,12 @@ rule insert_missed_tweets:
         "data/logs/insert_missed_tweets.txt"
     script:
         "src/fetching_data/insert_missed_tweets.py"
+
+rule merging_locational_tweets_and_states:
+    input:
+        "data/processed/dataframes/unique_geo_ids_with_states.parquet",
+        "data/logs/insert_missed_tweets.txt"
+    output:
+        "data/logs/locational_tweets_merged_with_states.txt"
+    script:
+        "src/fetching_data/merging_locational_tweets_and_states.py"

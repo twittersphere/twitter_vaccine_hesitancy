@@ -16,7 +16,7 @@ def read_world_sentiments():
 
     return world_data_sentiments.data
 
-def read_us_sentiments():
+def get_us_ids():
     us_data_path = "data/raw/daily_us_data_parquet"
     us_data = ReadData(us_data_path, column_list=['id'], file_format='parquet')
     us_data.read_files_and_combine_data()
@@ -32,7 +32,7 @@ def main():
     file_ = f"{combined_data_saving_path}/world_data_sentiments_raw.parquet"
     save_combined_data(world_data_sentiments, file_)
 
-    us_ids = read_us_sentiments()
+    us_ids = get_us_ids()
     us_data_sentiments = world_data_sentiments[
                     world_data_sentiments['ID'].isin(us_ids)
                     ].reset_index(drop=True)
