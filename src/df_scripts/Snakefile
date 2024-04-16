@@ -1,10 +1,13 @@
 rule df_scripts_all:
     input:
         "data/processed/data_frames/eda_df.parquet",
-        "data/processed/data_frames/fisher_exact/us_fisher_values.parquet",
-        "data/processed/data_frames/fisher_exact/world_fisher_values.parquet",
-        "data/processed/data_frames/fisher_exact/daily_us_fisher_values.parquet",
-        "data/processed/data_frames/authorid_date_sentiment_tweetcounts.parquet"
+        "data/processed/data_frames/fisher_exact/monthly_us_fisher_values.parquet",
+        "data/processed/data_frames/fisher_exact/monthly_world_fisher_values.parquet",
+        "data/processed/data_frames/authorid_date_sentiment_tweetcounts.parquet",
+        "data/processed/data_frames/authorid_date_sentiment_tweetcounts_us.parquet",
+        "data/processed/data_frames/authorid_state_sentiment_tweetcounts_us.parquet",
+        "data/processed/data_frames/date_based_covid_data_ATV_and_unemployment.parquet",
+        "data/processed/data_frames/correlation_df_VaccinationPercentage_ATV.parquet"
 
 rule eda_of_fetched_data:
     input:
@@ -38,16 +41,40 @@ rule fisher_exact:
         "data/processed/data_frames/us_id_date_state_filteredlabels.parquet",
         "data/processed/data_frames/world_id_date_filteredlabels.parquet"
     output:
-        "data/processed/data_frames/fisher_exact/us_fisher_values.parquet",
-        "data/processed/data_frames/fisher_exact/world_fisher_values.parquet",
-        "data/processed/data_frames/fisher_exact/daily_us_fisher_values.parquet"
+        "data/processed/data_frames/fisher_exact/monthly_us_fisher_values.parquet",
+        "data/processed/data_frames/fisher_exact/monthly_world_fisher_values.parquet",
+        "data/processed/data_frames/fisher_exact/daily_us_fisher_values.parquet",
+        "data/processed/data_frames/fisher_exact/state_us_fisher_values.parquet"
     script:
         "src/df_scripts/fisher_exact.py"
 
 rule authorid_date_sentiment_tweetcount:
     input:
-        "data/processed/data_frames/world_id_date_filteredlabels.parquet"
+        "data/processed/data_frames/world_id_date_filteredlabels.parquet",
+        "data/processed/data_frames/us_id_date_state_filteredlabels.parquet"
     output:
-        "data/processed/data_frames/authorid_date_sentiment_tweetcounts.parquet"
+        "data/processed/data_frames/authorid_date_sentiment_tweetcounts.parquet",
+        "data/processed/data_frames/authorid_date_sentiment_tweetcounts_us.parquet",
+        "data/processed/data_frames/authorid_state_sentiment_tweetcounts_us.parquet"
     script:
         "src/df_scripts/authorid_date_sentiment_tweetcount.py"
+
+rule date_based_covid_data_ATV:
+    input:
+        "data/processed/data_frames/daily_us_fisher_values.parquet",
+        "data/raw/covid_data/owid-covid-data.csv",
+        "data/raw/socio_economic_params/date_base_unemployment.parquet"
+    output:
+        "data/processed/data_frames/date_based_covid_data_ATV_and_unemployment.parquet"
+    script:
+        "src/df_scripts/date_based_covid_data_and_atv.py"
+
+rule state_based_vaccination_percentage_ATV:
+    input:
+        "data/raw/covid_data/us_state_vaccinations.parquet",
+        "data/processed/data_frames/fisher_exact/state_us_fisher_values.parquet"
+    output:
+        "data/processed/data_frames/correlation_df_VaccinationPercentage_ATV.parquet"
+    script:
+        "src/df_scripts/state_based_vaccination_percentage_and_atv.py"
+        

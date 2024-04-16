@@ -1,0 +1,3 @@
+rule embedding_ctm_all:
+    input:
+        TODO: write

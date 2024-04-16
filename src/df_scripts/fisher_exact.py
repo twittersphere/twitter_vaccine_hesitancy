@@ -121,6 +121,9 @@ def main():
     daily_us_fisher_values = [fisher_exact(table, alternative='two-sided') \
                 for table in date_table(daily_us_ready, daily_unique_dates)]
     
+    state_us_fisher_values = [fisher_exact(table, alternative='two-sided') \
+                for table in state_table(state_us_ready, state_us_ready['state'].values)]
+    
     os.makedirs(f"{df_path}/fisher_exact", exist_ok=True)
     convert2df_and_save(us_ready, us_fisher_values, 'date', unique_dates,
                         f"{df_path}/fisher_exact/monthly_us_fisher_values.parquet")
@@ -129,5 +132,8 @@ def main():
     convert2df_and_save(daily_us_ready, daily_us_fisher_values,
                         'date', daily_unique_dates,
                     f"{df_path}/fisher_exact/daily_us_fisher_values.parquet")
+    convert2df_and_save(state_us_ready, state_us_fisher_values,
+                        'state', state_us_ready['state'].values,
+                    f"{df_path}/fisher_exact/state_us_fisher_values.parquet")
 
     
