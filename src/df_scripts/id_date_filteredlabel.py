@@ -16,9 +16,9 @@ def filter_data(sentiment_preds, data):
     filtered_data.loc[:, 'label'] = labels
     
     # map argmax values to Rest, Pro, Anti
+    mapping = {0:"Rest", 1:"Pro", 2:"Anti"}
     filtered_data.loc[:, 'label'] = filtered_data['label'].apply(
-                                    lambda x: 'Rest' if x == 0 else (
-                                    'Pro' if x == 1 else 'Anti'))
+                                    lambda x: mapping[x])
     filtered_data = filtered_data.drop(columns=['Rest', 'Pro', 'Anti'])
 
     data_ready = filtered_data.join(data.set_index("id"), on='id').dropna()
@@ -54,6 +54,10 @@ def read_us_sentiments():
 
     return us_sentiment_preds
 
+def save_world_anti_ids(data, dataframes_path):
+    world_anti_ids = data.loc[data['label'] == 'Anti', ['id']]
+    world_anti_ids.to_parquet(f"{dataframes_path}/world_anti_ids.parquet")
+
 def main():
     dataframes_path = "data/processed/data_frames"
     os.makedirs(dataframes_path, exist_ok=True)
@@ -61,6 +65,7 @@ def main():
     world_data = read_world_tweets()
     world_sentiment_preds = read_world_sentiments()
     world_ready = filter_data(world_sentiment_preds, world_data)
+    save_world_anti_ids(world_ready, dataframes_path)
     world_ready.to_parquet(f"{dataframes_path}/world_id_date_filteredlabels.parquet")
     del world_ready, world_data, world_sentiment_preds
 

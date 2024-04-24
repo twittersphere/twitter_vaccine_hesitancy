@@ -34,7 +34,7 @@ def main():
 
     us_ids = get_us_ids()
     us_data_sentiments = world_data_sentiments[
-                    world_data_sentiments['ID'].isin(us_ids)
+                    world_data_sentiments['id'].isin(us_ids)
                     ].reset_index(drop=True)
     
     file_ = f"{combined_data_saving_path}/us_data_sentiments_raw.parquet"

@@ -30,7 +30,7 @@ def main():
         probs = tf.nn.softmax(raw_outputs, axis=1).numpy().astype(np.float32)
         id_probs = np.concatenate([np.array([i[0] for i in batch]).reshape(-1, 1),
                                    probs], axis=1)
-        pd.DataFrame(probs, columns=['ID', 'Rest', "Pro", 'Anti']).to_parquet(id_probs,
+        pd.DataFrame(probs, columns=['id', 'Rest', "Pro", 'Anti']).to_parquet(id_probs,
                                                                 index=False)
         idx += 1
 

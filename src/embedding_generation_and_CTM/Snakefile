@@ -1,3 +1,11 @@
 rule embedding_ctm_all:
     input:
-        TODO: write
+        TODO: Write the last output to create DAG
+
+rule embedding_generation:
+    input:
+        "data/processed/data_frames/world_anti_ids.parquet"
+    output:
+        "data/logs/embedding_generation.txt"
+    script:
+        "src/embedding_generation_and_CTM/embedding_generation.py"
