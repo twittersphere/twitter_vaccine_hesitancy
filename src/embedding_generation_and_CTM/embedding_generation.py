@@ -9,15 +9,17 @@ from sentence_transformers import SentenceTransformer
 
 
 def read_data_and_filter(world_data_path, dataframes_path):
-    read_data_world = ReadData(world_data_path, ['id', 'text'],
-                               filter_tweets=True)
-    read_data_world.read_csvs_and_combine_data()
-
-    world_data = read_data_world.data
     world_anti_ids = pd.read_parquet(f"{dataframes_path}/world_anti_ids.parquet")
     anti_ids = set(world_anti_ids['id'].values)
 
-    text = world_data[world_data['id'].isin(anti_ids)]['text'].values
+    read_data_world = ReadData(world_data_path, ['id', 'text'],
+                               filter_tweets=True,
+                               custom_filter="df['id'].isin(self.anti_ids)")
+    read_data_world.anti_ids = anti_ids
+    read_data_world.read_csvs_and_combine_data()
+    world_data = read_data_world.data
+
+    text = world_data['text'].values
 
     return text
 
