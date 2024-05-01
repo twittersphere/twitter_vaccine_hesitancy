@@ -50,7 +50,7 @@ def load_h5file():
     return embedding_h5file
 
 def main():
-    data_saving_path = "/data/processed/CTM"
+    data_saving_path = "data/processed/CTM"
     os.makedirs(data_saving_path, exist_ok=True)
 
     world_data_path = "data/raw/daily_data_parquet"

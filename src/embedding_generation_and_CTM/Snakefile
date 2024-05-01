@@ -1,3 +1,8 @@
+from src.embedding_generation_and_CTM.CTM_training import get_grid_search_params
+param_grid = get_grid_search_params()
+model_paths = [f"data/processed/CTM/model_{grid['k_numbers']}_{grid['hidden_dimensions'][0]}_{grid['dropout']}.pth" for grid in param_grid]
+topic_list_paths = [f"data/processed/CTM/topics_{grid['k_numbers']}_{grid['hidden_dimensions'][0]}_{grid['dropout']}.csv" for grid in param_grid]
+
 rule embedding_ctm_all:
     input:
         TODO: Write the last output to create DAG
@@ -6,6 +11,52 @@ rule embedding_generation:
     input:
         "data/processed/data_frames/world_anti_ids.parquet"
     output:
-        "data/logs/embedding_generation.txt"
+        "data/logs/embedding_generation.txt",
+        "data/processed/world_anti_embeddings.hdf5"
     script:
         "src/embedding_generation_and_CTM/embedding_generation.py"
+
+rule CTM_preprocessing:
+    input:
+        "data/logs/embedding_generation.txt",
+        "data/processed/world_anti_embeddings.hdf5",
+        "data/processed/data_frames/world_anti_ids.parquet"
+    output:
+        "data/processed/CTM/preprocessed_documents.parquet",
+        "data/processed/CTM/sp_preprocess_results.parquet",
+        "data/processed/CTM/training_dataset.pkl",
+        "data/processed/CTM/qt.pkl"
+    script:
+        "src/embedding_generation_and_CTM/CTM_preprocessing.py"
+
+rule CTM_training:
+    input:
+        "data/processed/CTM/preprocessed_documents.parquet",
+        "data/processed/CTM/sp_preprocess_results.parquet",
+        "data/processed/CTM/training_dataset.pkl",
+        "data/processed/CTM/qt.pkl"
+    output:
+        model_paths,
+        topic_list_paths
+    script:
+        "src/embedding_generation_and_CTM/CTM_training.py"
+
+rule CTM_metric_calculation:
+    input:
+        "data/processed/CTM/preprocessed_documents.parquet",
+        topic_list_paths
+    output:
+        "data/processed/CTM/topics/coherence_topic_diversity.pkl"
+    script:
+        "src/embedding_generation_and_CTM/CTM_metric_calculation.py"
+
+rule CTM_sampling:
+    input:
+        "data/processed/CTM/qt.pkl",
+        "data/processed/CTM/training_dataset.pkl",
+        "data/processed/world_anti_embeddings.hdf5",
+        "data/processed/CTM/sp_preprocess_results.parquet"
+    output:
+        "data/logs/CTM_sampling.txt"
+    script:
+        "src/embedding_generation_and_CTM/CTM_sampling.py"

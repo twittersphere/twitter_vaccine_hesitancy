@@ -26,10 +26,14 @@ def load_preprocess_results(data_saving_path):
 
     return retained_indices, unpreprocessed_documents
 
-def get_grid_search_params():
+def get_param_grid():
     param_grid = {'k_numbers':list(range(5, 11)),
               'hidden_dimensions': [(200, 200), (500, 500), (700, 700)],
               'dropout': [0.2, 0.5, 0.8]}
+    return param_grid
+
+def get_grid_search_params():
+    param_grid = get_param_grid()
 
     grid_search = list(ParameterGrid(param_grid))
     return grid_search
@@ -56,17 +60,16 @@ def start_training(grid_search, training_dataset, embeddings,
         topic_list = pd.DataFrame(np.array(topic_list).T, columns=columns)
 
         saving_ = f"{topics_saving_path}/topics_{grid['k_numbers']}" \
-            f"_{grid['hidden_dimensions'][0]}_{grid['dropout']}"
+            f"_{grid['hidden_dimensions'][0]}_{grid['dropout']}.csv"
         topic_list.to_csv(saving_, index=False)
 
         ctm.train_data = None
         ctm.save(model_path)
 
-
 def main():
-    topics_saving_path = "/data/processed/CTM/topics"
-    model_saving_path = '/models/ctm_models'
-    data_saving_path = "/data/processed/CTM"
+    topics_saving_path = "data/processed/CTM/topics"
+    model_saving_path = 'models/ctm_models'
+    data_saving_path = "data/processed/CTM"
     os.makedirs(topics_saving_path, exist_ok=True)
     os.makedirs(model_saving_path, exist_ok=True)
 

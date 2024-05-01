@@ -19,7 +19,7 @@ def calculate_coherence_and_diversity(topics_saving_path, texts):
     for grid in tqdm(grid_search):
 
         topic_path = f"{topics_saving_path}/topics_{grid['k_numbers']}_" \
-            f"{grid['hidden_dimensions'][0]}_{grid['dropout']}_{grid['beta']}.csv"
+            f"{grid['hidden_dimensions'][0]}_{grid['dropout']}.csv"
         topic_list = pd.read_csv(topic_path).values.T
 
         npmi = CoherenceNPMI(texts=texts, topics=topic_list)
@@ -35,8 +35,8 @@ def save_coherence_and_diversity(coherence, topic_diversity, topics_saving_path)
         pickle.dump([coherence, topic_diversity], f)
 
 def main():
-    topics_saving_path = "/data/processed/CTM/topics"
-    data_saving_path = "/data/processed/CTM"
+    topics_saving_path = "data/processed/CTM/topics"
+    data_saving_path = "data/processed/CTM"
 
     texts = load_text(data_saving_path)
     coherence, topic_diversity = calculate_coherence_and_diversity(topics_saving_path,
