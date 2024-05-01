@@ -20,7 +20,7 @@ conda activate snakemake
 snakemake --use-conda
 ```
 
-- So simple right? You just need to install snakemake workflow management system. Then the code will reproduce all the experiments.
+- You just need to install dependencies and snakemake workflow management system. Then the code will reproduce all the experiments.
 
 - If you used any code or want to refer the paper, please cite:
 ```
