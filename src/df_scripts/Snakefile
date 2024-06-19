@@ -32,7 +32,8 @@ rule id_date_filteredlabel:
         "data/processed/tweet_sentiment_predictions/us_data_sentiments_raw.parquet"
     output:
         "data/processed/data_frames/us_id_date_state_filteredlabels.parquet"
-        "data/processed/data_frames/world_id_date_filteredlabels.parquet"
+        "data/processed/data_frames/world_id_date_filteredlabels.parquet",
+        "data/processed/data_frames/world_anti_ids.parquet"
     script:
         "src/df_scripts/id_date_filteredlabel.py"
 
@@ -77,4 +78,55 @@ rule state_based_vaccination_percentage_ATV:
         "data/processed/data_frames/correlation_df_VaccinationPercentage_ATV.parquet"
     script:
         "src/df_scripts/state_based_vaccination_percentage_and_atv.py"
-        
+
+rule ctm_margin_cleaning:
+    input:
+        "data/processed/CTM/probs/probs_8_200_0.2.parquet",
+        "data/processed/data_frames/world_anti_ids.parquet"
+    output:
+        "data/processed/CTM/probs/cleaned_probs_8_200_0.2.parquet",
+        "data/processed/data_frames/cleaned_world_anti_ids.parquet"
+    script:
+        "src/df_scripts/ctm_margin_cleaning.py"
+
+rule ctm_date_topic_count:
+    input:
+        "data/processed/data_frames/cleaned_world_anti_ids.parquet",
+        "data/processed/CTM/probs/cleaned_probs_8_200_0.2.parquet",
+    output:
+        "data/processed/data_frames/id_date_topic_8_200_0.2.parquet"
+        "data/processed/data_frames/date_topic_count_8_200_0.2.parquet"
+    script:
+        "src/df_scripts/ctm_date_topic_count.py"
+
+rule ctm_day_keyword_count:
+    input:
+        "data/processed/data_frames/cleaned_world_anti_ids.parquet",
+        "data/processed/data_frames/id_date_topic_8_200_0.2.parquet",
+        "data/processed/CTM/topics/topics_8_200_0.2.parquet",
+    output:
+        expand(
+            "data/processed/CTM/topics/day_keyword_count_for_topics_8_200_0.2/topic{topic}.parquet",
+            topic=list(range(8)))
+    script:
+        "src/df_scripts/ctm_day_keyword_count.py"
+
+rule ctm_date_bigram_count:
+    input:
+        "data/processed/data_frames/cleaned_world_anti_ids.parquet",
+        "data/processed/data_frames/id_date_topic_8_200_0.2.parquet",
+    output:
+        "data/processed/data_frames/date_and_bigram_collocations_df.parquet"
+    script:
+        "src/df_scripts/ctm_date_bigram_count.py"
+
+rule data_preparation_for_zenodo:
+    input:
+        "data/processed/CTM/probs/cleaned_probs_8_200_0.2.parquet",
+        "data/processed/data_frames/cleaned_world_anti_ids.parquet",
+        "data/processed/data_frames/world_data_sentiments_raw.parquet",
+    output:
+        "data/processed/data_frames/zenodo/ctm_predictions.parquet",
+        "data/processed/data_frames/zenodo/attitude_predictions.parquet"
+    script:
+        "src/df_scripts/data_preparation_for_zenodo.py"

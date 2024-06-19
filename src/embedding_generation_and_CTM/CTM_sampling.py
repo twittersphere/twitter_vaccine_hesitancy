@@ -89,7 +89,7 @@ def main():
         ctm_pd = vis.prepare(sort_topics=False, **lda_vis_data)
         vis.save_html(ctm_pd, f"{plot_saving_path}/lda_vis_figure_{grid['k_numbers']}_{grid['hidden_dimensions'][0]}_{grid['dropout']}.html")
 
-        save_log("CTM_sampling")
+    save_log("CTM_sampling")
 
 if __name__ == "__main__":
     main()

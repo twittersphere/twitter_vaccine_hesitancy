@@ -55,7 +55,8 @@ def main():
 
     world_data_path = "data/raw/daily_data_parquet"
     dataframes_path = "data/processed/data_frames"
-    text = read_data_and_filter(world_data_path, dataframes_path)
+    anti_ids_path = f"{dataframes_path}/world_anti_ids.parquet"
+    text = read_data_and_filter(world_data_path, anti_ids_path)
 
     embedding_h5file = load_h5file()
     embeddings = embedding_h5file['embeddings']

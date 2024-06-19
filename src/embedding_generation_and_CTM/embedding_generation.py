@@ -7,15 +7,14 @@ from src.scripts.utils import save_log
 from src.scripts.read_data import ReadData
 from sentence_transformers import SentenceTransformer
 
+def read_data_and_filter(world_data_path, df_path, columns=['id', 'text']):
+    ids = pd.read_parquet(df_path)
+    ids_set = set(ids['id'].values)
 
-def read_data_and_filter(world_data_path, dataframes_path):
-    world_anti_ids = pd.read_parquet(f"{dataframes_path}/world_anti_ids.parquet")
-    anti_ids = set(world_anti_ids['id'].values)
-
-    read_data_world = ReadData(world_data_path, ['id', 'text'],
+    read_data_world = ReadData(world_data_path, columns,
                                filter_tweets=True,
-                               custom_filter="df['id'].isin(self.anti_ids)")
-    read_data_world.anti_ids = anti_ids
+                               custom_filter="df['id'].isin(self.ids_set)")
+    read_data_world.ids_set = ids_set
     read_data_world.read_csvs_and_combine_data()
     world_data = read_data_world.data
 
@@ -53,7 +52,8 @@ def main():
 
     world_data_path = "data/raw/daily_data_parquet"
     dataframes_path = "data/processed/data_frames"
-    text = read_data_and_filter(world_data_path, dataframes_path)
+    anti_ids_path = f"{dataframes_path}/world_anti_ids.parquet"
+    text = read_data_and_filter(world_data_path, anti_ids_path)
     
     model = SentenceTransformer("digitalepidemiologylab/covid-twitter-bert-v2",
                                 device='xla')
