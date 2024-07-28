@@ -1,17 +1,50 @@
 rule figures_all:
     input:
-        "figures/all_figures/tweet_user_geoloc_counts.tiff",
-        "figures/all_figures/user_topic_analysis_on_ChordDiagram.pdf",
-        
+        "figures/main_figure_svgs/figure1A.svg",
+        "figures/main_figure_svgs/figure4.svg",
+        expand("figures/supp_figure_svgs/figure10{alphabet}.svg", alphabet=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']),
+        "figures/main_figure_svgs/figure3C.svg",
+        "figures/main_figure_svgs/figure3D.svg",
+        "figures/supp_figure_svgs/figure11.svg",
+        "figures/supp_figure_svgs/figure12.svg",
+        "data/processed/data_frames/socio_economic_params_pca_coefficients.parquet",
+        "figures/main_figure_svgs/figure1C.svg",
+        "figures/main_figure_svgs/figure3B.svg",
+        "figures/main_figure_svgs/figure3F.svg",
+        "data/processed/supp_tables/univariate_significance_table.xlsx",
+        "figures/supp_figure_svgs/figure13.svg",
+        "figures/main_figure_svgs/figure3E.svg",
+        "figures/main_figure_svgs/figure3A.svg",
+        "figures/supp_figure_svgs/figure4A.svg",
+        expand("figures/supp_figure_svgs/figure14/figure14{letter}.svg", letter=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']),
+        "figures/supp_figure_svgs/figure3A.svg",
+        "figures/supp_figure_svgs/figure3B.svg",
+        "figures/supp_figure_svgs/figure1.svg",
+        "figures/main_figure_svgs/figure1B.svg",
+        "figures/supp_figure_svgs/figure2.svg",
+        "figures/main_figure_svgs/figure2B.svg",
+        "figures/main_figure_svgs/figure2C.svg",
+        "figures/supp_figure_svgs/figure5.svg",
+        "figures/supp_figure_svgs/figure9A.svg",
+        "figures/supp_figure_svgs/figure9B.svg",
+        "figures/main_figure_svgs/figure2A.svg",
+        "figures/supp_figure_svgs/figure7.svg",
+        "figures/supp_figure_svgs/figure8A.svg",
+        "figures/supp_figure_svgs/figure8B.svg",
+        "data/processed/data_frames/label_change_of_users_who_sent_2_tweets.parquet",
+        "data/tables/label_change_of_users_who_sent_2_tweets.xlsx",
+        "figures/supp_figure_svgs/figure4B.svg",
+        "figures/supp_figure_svgs/figure6.svg",
+
 
 rule fetched_data_barplot:
     input:
-        "figures/icons/twitter_bird_icon.png",
-        "figures/icons/avatar_icon.png",
-        "figures/icons/location_icon.png",
+        "figures/iconduck/comment.png",
+        "figures/iconduck/person.png",
+        "figures/iconduck/location.png",
         "data/processed/dataframes/eda_df.parquet"
     output:
-        "figures/all_figures/tweet_user_geoloc_counts.tiff"
+        "figures/main_figure_svgs/figure1A.svg"
     script:
         "src/figures/fetched_data_barplot.py"
 
@@ -19,7 +52,7 @@ rule chordplot:
     input:
         "data/processed/data_frames/prepared_links.csv"
     output:
-        "figures/all_figures/user_topic_analysis_on_ChordDiagram.pdf"
+        "figures/main_figure_svgs/figure4.svg"
     script:
         "src/figures/chordplot.R"
 
@@ -28,11 +61,125 @@ rule figures_of_socio_economic_parameters_and_atv:
         "main_configs.json",
         "data/processed/data_frames/combined_socio_economic_parameters.parquet"
     output:
-        "figures/supp_figure_svgs/figure10{alphabet}.svg",
+        expand("figures/supp_figure_svgs/figure10{alphabet}.svg", alphabet=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']),
         "figures/main_figure_svgs/figure3C.svg",
         "figures/main_figure_svgs/figure3D.svg",
         "figures/supp_figure_svgs/figure11.svg",
         "figures/supp_figure_svgs/figure12.svg",
         "data/processed/data_frames/socio_economic_params_pca_coefficients.parquet"
     notebook:
-        "src/figure_notebooks/figures_of_socio_economic_parameters_and_atv.ipynb"
+        "src/figures/figures_of_socio_economic_parameters_and_atv.ipynb"
+
+rule atv_figures:
+    input:
+        "data/processed/data_frames/authorid_state_sentiment_tweetcounts_us.parquet",
+        "data/processed/data_frames/authorid_date_sentiment_tweetcounts_us.parquet",
+        "data/processed/data_frames/daily_us_fisher_values.parquet",
+        "data/processed/data_frames/state_us_fisher_values.parquet",
+    output:
+        "figures/main_figure_svgs/figure1C.svg",
+        "figures/main_figure_svgs/figure3B.svg",
+    notebook:
+        "src/figures/atv_figures.ipynb"
+
+rule atv_plsregression:
+    input:
+        "main_configs.json",
+        "data/processed/data_frames/combined_socio_economic_parameters.parquet",
+    output:
+        "figures/main_figure_svgs/figure3F.svg",
+        "data/processed/supp_tables/univariate_significance_table.xlsx",
+        "figures/supp_figure_svgs/figure13.svg",
+        "figures/main_figure_svgs/figure3E.svg",
+    notebook:
+        "src/figures/atv_plsregression.ipynb"
+
+rule choropleth_map:
+    input:
+        "main_configs.json",
+        "data/processed/data_frames/state_us_fisher_values.parquet",
+        "data/processed/data_frames/correlation_df_VaccinationPercentage_ATV.parquet",
+        "data/raw/geopandas_obj.pkl",
+    output:
+        "figures/main_figure_svgs/figure3A.svg",
+        "figures/supp_figure_svgs/figure4A.svg",
+    notebook:
+        "src/figures/choropleth_map.ipynb"
+
+rule ctm_topic_keyword_analysis:
+    input:
+        "main_configs.json",
+        "data/processed/CTM/topics/topics_8_200_0.2.parquet",
+        "data/processed/CTM/probs/cleaned_probs_8_200_0.2.parquet",
+        "data/processed/data_frames/date_topic_count_8_200_0.2.parquet",
+        "data/processed/data_frames/date_and_bigram_collocations_df.parquet",
+        expand("data/processed/CTM/topics/day_keyword_count_for_topics_8_200_0.2/topic{topic}.parquet", topic=list(range(1,9))),
+    output:
+        expand("figures/supp_figure_svgs/figure14/figure14{letter}.svg", letter=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'])
+    notebook:
+        "src/figures/ctm_topic_keyword_analysis.ipynb"
+
+rule locational_and_nonlocational_tweets_correlation:
+    input:
+        "data/processed/data_frames/fisher_exact/monthly_us_fisher_values.parquet",
+        "data/processed/data_frames/fisher_exact/monthly_world_fisher_values.parquet",
+        "data/processed/data_frames/fisher_exact/daily_us_fisher_values.parquet",
+        "data/processed/data_frames/fisher_exact/daily_world_fisher_values.parquet",
+    output:
+        "figures/supp_figure_svgs/figure3A.svg",
+        "figures/supp_figure_svgs/figure3B.svg",
+    notebook:
+        "src/figures/locational_and_nonlocational_tweets_correlation.ipynb"
+
+rule plot_number_of_tweets_sent_per_hour:
+    input:
+        "data/processed/data_frames/time_tweet_number_analysis.parquet",
+    output:
+        "figures/supp_figure_svgs/figure1.svg",
+    notebook:
+        "src/figures/plot_number_of_tweets_sent_per_hour.ipynb"
+
+rule precision_recall_and_cutoff_curves:
+    input:
+        "data/processed/data_frames/precision_recall_threshold_curve_results.pkl",
+    output:
+        "figures/main_figure_svgs/figure1B.svg",
+        "figures/supp_figure_svgs/figure2.svg",
+    notebook:
+        "src/figures/precision_recall_and_cutoff_curves.ipynb"
+
+rule time_based_covid_data_and_user_analysis:
+    input:
+        "data/processed/data_frames/authorid_date_sentiment_tweetcounts.parquet",
+        "data/processed/data_frames/diff_dfs.pkl",
+    output:
+        "figures/main_figure_svgs/figure2B.svg",
+        "figures/main_figure_svgs/figure2C.svg",
+        "figures/supp_figure_svgs/figure5.svg",
+        "figures/supp_figure_svgs/figure9A.svg",
+        "figures/supp_figure_svgs/figure9B.svg",
+    notebook:
+        "src/figures/time_based_covid_data_and_user_analysis.ipynb"
+
+rule user_atv_analysis:
+    input:
+        "data/processed/data_frames/authorid_date_sentiment_tweetcounts.parquet",
+    output:
+        "figures/main_figure_svgs/figure2A.svg",
+        "figures/supp_figure_svgs/figure7.svg",
+        "figures/supp_figure_svgs/figure8A.svg",
+        "figures/supp_figure_svgs/figure8B.svg",
+        "data/processed/data_frames/label_change_of_users_who_sent_2_tweets.parquet",
+        "data/tables/label_change_of_users_who_sent_2_tweets.xlsx",
+    notebook:
+        "src/figures/user_atv_analysis.ipynb"
+
+rule vaccination_percentage_and_ATV:
+    input:
+        "data/processed/data_frames/correlation_df_VaccinationPercentage_ATV.parquet",
+        "data/processed/data_frames/date_based_covid_data_ATV_and_unemployment.parquet",
+    output:
+        "figures/supp_figure_svgs/figure4B.svg",
+        "figures/supp_figure_svgs/figure6.svg",
+    notebook:
+        "src/figures/vaccination_percentage_and_ATV.ipynb"

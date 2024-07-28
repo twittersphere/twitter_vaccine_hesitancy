@@ -1,6 +1,8 @@
 rule table_scripts_all:
     input:
         "data/tables/s1_table.xlsx",
+        "data/tables/precision_recall_table.xlsx",
+        
 
 rule country_tweet_counts_to_table:
     input:
@@ -9,3 +11,11 @@ rule country_tweet_counts_to_table:
         "data/tables/s1_table.xlsx"
     script:
         "src/table_scripts/country_tweet_counts_and_ratio.py"
+
+rule precision_recall_table:
+    input:
+        "data/processed/data_frames/precision_recall_threshold_curve_results.pkl"
+    output:
+        "data/tables/s2_table.xlsx"
+    script:
+        "src/table_scripts/precision_recall_table.py"
