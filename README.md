@@ -1,12 +1,22 @@
 # Exploring vaccine hesitancy in digital public discourse: From  tribal polarization to socio-economic disparities
 
 Official Repository of the paper.
-## Requirements
+
+## Installation
+
+Conda environment creation:
 ```bash
-pip install -r requirements.txt
+conda create env -n vaccine_hesitancy --python=3.9 -y
 ```
-- [Snakemake](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
-- CTM Installation:
+
+Activate conda environment
+```bash
+conda activate vaccine_hesitancy
+```
+
+Install [Snakemake](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
+
+CTM Installation:
 ```bash
 git clone https://github.com/HuzeyfeAyaz/contextualized-topic-models.git
 cd contextualized-topic-models
@@ -14,13 +24,18 @@ git checkout h5py_support
 python setup.py install
 ```
 
-## Usage
+Install all other dependencies
 ```bash
-conda activate snakemake
-snakemake --use-conda
+pip install -r requirements.txt
 ```
 
-- You just need to install dependencies and snakemake workflow management system. Then the code will reproduce all the experiments.
+## Usage
+
+```bash
+snakemake --cores=8
+```
+
+> Note: This is the refactored version of the main code and not fully tested. Please use cautiously.
 
 - If you used any code or want to refer the paper, please cite:
 ```

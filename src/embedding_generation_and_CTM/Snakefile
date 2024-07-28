@@ -1,11 +1,15 @@
 from src.embedding_generation_and_CTM.CTM_training import get_grid_search_params
 param_grid = get_grid_search_params()
-model_paths = [f"data/processed/CTM/model_{grid['k_numbers']}_{grid['hidden_dimensions'][0]}_{grid['dropout']}.pth" for grid in param_grid]
-topic_list_paths = [f"data/processed/CTM/topics_{grid['k_numbers']}_{grid['hidden_dimensions'][0]}_{grid['dropout']}.csv" for grid in param_grid]
+model_paths = [
+    f"data/processed/CTM/model_{grid['k_numbers']}_{grid['hidden_dimensions'][0]}_{grid['dropout']}.pth"
+    for grid in param_grid]
+topic_list_paths = [
+    f"data/processed/CTM/topics_{grid['k_numbers']}_{grid['hidden_dimensions'][0]}_{grid['dropout']}.csv"
+    for grid in param_grid]
 
 rule embedding_ctm_all:
     input:
-        TODO: Write the last output to create DAG
+        "data/logs/CTM_sampling.txt"
 
 rule embedding_generation:
     input:

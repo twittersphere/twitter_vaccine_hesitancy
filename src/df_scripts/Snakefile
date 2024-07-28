@@ -44,6 +44,7 @@ rule fisher_exact:
     output:
         "data/processed/data_frames/fisher_exact/monthly_us_fisher_values.parquet",
         "data/processed/data_frames/fisher_exact/monthly_world_fisher_values.parquet",
+        "data/processed/data_frames/fisher_exact/daily_world_fisher_values.parquet",
         "data/processed/data_frames/fisher_exact/daily_us_fisher_values.parquet",
         "data/processed/data_frames/fisher_exact/state_us_fisher_values.parquet"
     script:
@@ -96,6 +97,7 @@ rule ctm_date_topic_count:
     output:
         "data/processed/data_frames/id_date_topic_8_200_0.2.parquet"
         "data/processed/data_frames/date_topic_count_8_200_0.2.parquet"
+        "data/processed/data_frames/authorid_date_topic_count_8_200_0.2.parquet"
     script:
         "src/df_scripts/ctm_date_topic_count.py"
 
@@ -103,7 +105,7 @@ rule ctm_day_keyword_count:
     input:
         "data/processed/data_frames/cleaned_world_anti_ids.parquet",
         "data/processed/data_frames/id_date_topic_8_200_0.2.parquet",
-        "data/processed/CTM/topics/topics_8_200_0.2.parquet",
+        "data/processed/CTM/topics/topics_8_200_0.2.csv",
     output:
         expand(
             "data/processed/CTM/topics/day_keyword_count_for_topics_8_200_0.2/topic{topic}.parquet",
@@ -130,3 +132,53 @@ rule data_preparation_for_zenodo:
         "data/processed/data_frames/zenodo/attitude_predictions.parquet"
     script:
         "src/df_scripts/data_preparation_for_zenodo.py"
+
+rule number_of_tweets_sent_per_hour:
+    input:
+        "data/processed/data_frames/cleaned_world_anti_ids.parquet",
+    output:
+        "data/processed/data_frames/time_tweet_number_analysis.parquet"
+    script:
+        "src/df_scripts/number_of_tweets_sent_per_hour.py"
+
+rule time_based_user_analysis:
+    input:
+        "data/processed/data_frames/authorid_date_sentiment_tweetcounts.parquet",
+    output:
+        "data/processed/data_frames/diff_dfs.pkl"
+    script:
+        "src/df_scripts/time_based_user_analysis.py"
+
+rule results_of_precision_recall_threshold_curve:
+    input:
+        "data/crowdbreaks_data/crowdbreaks_tweet_ids_and_labels.csv",
+        "data/crowdbreaks_data/crowdbreaks_tweets.parquet",
+    output:
+        "data/processed/data_frames/precision_recall_threshold_curve_results.pkl"
+    script:
+        "src/df_scripts/results_of_precision_recall_threshold_curve.py"
+
+rule socio_economic_params_and_atv:
+    input:
+        "data/raw/socio_economic_params/state_level_data/CITIZENSHIP STATUS IN THE UNITED STATES.xlsx",
+        "data/raw/socio_economic_params/state_level_data/EDUCATIONAL ATTAINMENT FOR THE POPULATION 25 YEARS AND OVER.xlsx",
+        "data/raw/socio_economic_params/state_level_data/EMPLOYMENT STATUS FOR THE POPULATION 16 YEARS AND OVER.xlsx",
+        "data/raw/socio_economic_params/state_level_data/MEDIAN HOUSEHOLD INCOME IN THE PAST 12 MONTHS (IN 2020 INFLATION-ADJUSTED DOLLARS).xlsx",
+        "data/raw/socio_economic_params/state_level_data/POVERTY STATUS IN THE PAST 12 MONTHS BY AGE.xlsx",
+        "data/raw/socio_economic_params/state_level_data/RACE.xlsx",
+        "data/raw/socio_economic_params/state_level_data/1976-2020-president.csv",
+        "data/raw/socio_economic_params/state_level_data/Social Capital Project Social Capital Index Data.xlsx - State Index.csv",
+        "data/raw/socio_economic_params/state_level_data/pet_ownership2.csv",
+        "data/processed/data_frames/fisher_exact/state_us_fisher_values.parquet",
+    output:
+        "data/processed/data_frames/combined_socio_economic_parameters.parquet"
+    script:
+        "src/df_scripts/socio_economic_params_and_atv.py"
+
+rule user_topic_analysis:
+    input:
+        "data/processed/data_frames/authorid_date_topic_count_8_200_0.2.parquet"
+    output:
+        "data/processed/data_frames/prepared_links.csv"
+    script:
+        "src/df_scripts/user_topic_analysis.py"

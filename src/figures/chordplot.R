@@ -45,8 +45,10 @@ for (i in topic_names) {
 }
 
 showtext_auto()
-file_name <- "figures/all_figures/user_topic_analysis_on_ChordDiagram.pdf"
-pdf(file = file_name, width=7, height=3.5)
+# file_name <- "figures/main_figure_svgs/user_topic_analysis_on_ChordDiagram.pdf"
+# pdf(file = file_name, width=7, height=3.5)
+file_name <- "figures/main_figure_svgs/figure4.svg"
+svg(file = file_name, width=7, height=3.5)
 par(mfrow = c(2, 4), cex= 0.45, mar = c(0, 2, 0, 1.1), xpd=NA)
 for (i in topic_names) {
   str_counter <- as.character(counter)

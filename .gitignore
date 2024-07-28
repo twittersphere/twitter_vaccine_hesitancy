@@ -1,7 +1,8 @@
 **/__pycache__/
 **/.vscode
-**.ipynb
+completed_notebooks/
 **/.DS_Store
 show_directory_tree.py
 **/*test_script.py
+check.txt
 test.py

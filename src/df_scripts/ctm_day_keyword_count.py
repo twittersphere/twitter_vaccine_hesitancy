@@ -56,7 +56,7 @@ def main():
         'str').apply(lambda x: x[:10])
 
     top_50_keywords = pd.read_parquet(
-        f"{topics_saving_path}/topics_8_200_0.2.parquet")
+        f"{topics_saving_path}/topics_8_200_0.2.csv")
 
     day_keyword_count_path = f"{topics_saving_path}/day_keyword_count_for_" \
         "topics_8_200_0.2"

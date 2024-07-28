@@ -7,6 +7,7 @@ from src.scripts.utils import save_log
 from src.scripts.read_data import ReadData
 from sentence_transformers import SentenceTransformer
 
+
 def read_data_and_filter(world_data_path, df_path, columns=['id', 'text']):
     ids = pd.read_parquet(df_path)
     ids_set = set(ids['id'].values)
@@ -18,9 +19,8 @@ def read_data_and_filter(world_data_path, df_path, columns=['id', 'text']):
     read_data_world.read_csvs_and_combine_data()
     world_data = read_data_world.data
 
-    text = world_data['text'].values
+    return world_data
 
-    return text
 
 def generate_embeddings(tools, text, model, h5file_path):
     if not os.path.exists(h5file_path):
@@ -47,20 +47,23 @@ def generate_embeddings(tools, text, model, h5file_path):
 
     embedding_h5file.close()
 
+
 def main():
     tools = Tools()
 
     world_data_path = "data/raw/daily_data_parquet"
     dataframes_path = "data/processed/data_frames"
     anti_ids_path = f"{dataframes_path}/world_anti_ids.parquet"
-    text = read_data_and_filter(world_data_path, anti_ids_path)
-    
+    world_data = read_data_and_filter(world_data_path, anti_ids_path)
+    text = world_data['text'].values
+    del world_data  # free memory
+
     model = SentenceTransformer("digitalepidemiologylab/covid-twitter-bert-v2",
                                 device='xla')
     h5file_path = "data/processed/world_anti_embeddings.hdf5"
     generate_embeddings(tools, text, model, h5file_path)
     save_log("embedding_generation")
-    
+
 
 if __name__ == '__main__':
     main()

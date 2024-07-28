@@ -22,3 +22,17 @@ rule chordplot:
         "figures/all_figures/user_topic_analysis_on_ChordDiagram.pdf"
     script:
         "src/figures/chordplot.R"
+
+rule figures_of_socio_economic_parameters_and_atv:
+    input:
+        "main_configs.json",
+        "data/processed/data_frames/combined_socio_economic_parameters.parquet"
+    output:
+        "figures/supp_figure_svgs/figure10{alphabet}.svg",
+        "figures/main_figure_svgs/figure3C.svg",
+        "figures/main_figure_svgs/figure3D.svg",
+        "figures/supp_figure_svgs/figure11.svg",
+        "figures/supp_figure_svgs/figure12.svg",
+        "data/processed/data_frames/socio_economic_params_pca_coefficients.parquet"
+    notebook:
+        "src/figure_notebooks/figures_of_socio_economic_parameters_and_atv.ipynb"
