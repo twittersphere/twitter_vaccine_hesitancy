@@ -31,8 +31,6 @@ rule figures_all:
         "figures/supp_figure_svgs/figure7.svg",
         "figures/supp_figure_svgs/figure8A.svg",
         "figures/supp_figure_svgs/figure8B.svg",
-        "data/processed/data_frames/label_change_of_users_who_sent_2_tweets.parquet",
-        "data/tables/label_change_of_users_who_sent_2_tweets.xlsx",
         "figures/supp_figure_svgs/figure4B.svg",
         "figures/supp_figure_svgs/figure6.svg",
 
@@ -168,9 +166,7 @@ rule user_atv_analysis:
         "figures/main_figure_svgs/figure2A.svg",
         "figures/supp_figure_svgs/figure7.svg",
         "figures/supp_figure_svgs/figure8A.svg",
-        "figures/supp_figure_svgs/figure8B.svg",
-        "data/processed/data_frames/label_change_of_users_who_sent_2_tweets.parquet",
-        "data/tables/label_change_of_users_who_sent_2_tweets.xlsx",
+        "figures/supp_figure_svgs/figure8B.svg"
     notebook:
         "src/figures/user_atv_analysis.ipynb"
 

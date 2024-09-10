@@ -1,8 +1,13 @@
 rule table_scripts_all:
     input:
         "data/tables/s1_table.xlsx",
-        "data/tables/precision_recall_table.xlsx",
-        
+        "data/tables/s2_table.xlsx",
+        "data/tables/s3_table.xlsx",
+        "data/tables/s4_table.xlsx",
+        "data/tables/s5_table.xlsx",
+        "data/tables/s6_table.xlsx",
+        "data/tables/s7_table.xlsx"
+
 
 rule country_tweet_counts_to_table:
     input:
@@ -19,3 +24,45 @@ rule precision_recall_table:
         "data/tables/s2_table.xlsx"
     script:
         "src/table_scripts/precision_recall_table.py"
+
+rule classification_report:
+    input:
+        "models/sentiment_models/best_model.db",
+        "data/crowdbreaks_data/crowdbreaks_tweets.parquet",
+        "data/crowdbreaks_data/crowdbreaks_tweet_ids_and_labels.csv",
+    output:
+        "data/tables/s3_table.xlsx"
+    script:
+        "src/table_scripts/classification_report.py"
+
+rule idea_change:
+    input:
+        "data/processed/data_frames/authorid_date_sentiment_tweetcounts.parquet",
+    output:
+        "data/tables/s4_table.xlsx"
+    script:
+        "src/table_scripts/idea_change.py"
+
+rule fisher_exact_table:
+    input:
+        "data/processed/data_frames/fisher_exact/state_us_fisher_values.parquet"
+    output:
+        "data/tables/s5_table.xlsx"
+    script:
+        "src/table_scripts/fisher_exact_table.py"
+
+rule socio_economic_params_pca_coefficients:
+    input:
+        "data/processed/data_frames/socio_economic_params_pca_coefficients.parquet"
+    output:
+        "data/tables/s6_table.xlsx"
+    script:
+        "src/table_scripts/socio_economic_params_pca_coefficients.py"
+
+rule top_tweets:
+    input:
+        expand("data/processed/CTM/top_tweets/8_200_0.2/topic_{topic}.csv", topic=list(range(1, 9)))
+    output:
+        "data/tables/s7_table.xlsx"
+    script:
+        "src/table_scripts/top_tweets.py"
