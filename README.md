@@ -41,7 +41,4 @@ snakemake --cores=8
 ```
 Ayaz H, Celik MH, Koytak HZ, Yanik IE (2024) Exploring vaccine hesitancy in digital public discourse: From tribal polarization to socio-economic disparities. PLOS ONE 19(11): e0308122. https://doi.org/10.1371/journal.pone.0308122
 ```
-- BibTex
-```
-https://journals.plos.org/plosone/article/citation/bibtex?id=10.1371/journal.pone.0308122
-```
+- [BibTex Link](https://journals.plos.org/plosone/article/citation/bibtex?id=10.1371/journal.pone.0308122)
